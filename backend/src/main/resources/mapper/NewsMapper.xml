@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.center.mapper.NewsMapper">
+
+    <!-- 基本查询结果映射 -->
+    <resultMap id="BaseResultMap" type="com.community.center.entity.News">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="type" property="type"/>
+        <result column="publisher_id" property="publisherId"/>
+        <result column="publish_time" property="publishTime"/>
+        <result column="status" property="status"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 基本查询字段 -->
+    <sql id="Base_Column_List">
+        id, title, content, type, publisher_id, publish_time, status, view_count, create_time, update_time
+    </sql>
+
+    <!-- 示例：根据ID查询 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM news
+        WHERE id = #{id}
+    </select>
+
+</mapper>

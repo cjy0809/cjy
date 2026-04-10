@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.center.mapper.UserFavoriteMapper">
+    
+    <!-- 分页查询用户收藏列表 -->
+    <resultMap id="UserFavoriteDetailMap" type="com.community.center.entity.UserFavorite">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="targetType" column="target_type"/>
+        <result property="targetId" column="target_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="targetTitle" column="targetTitle"/>
+        <result property="targetDescription" column="targetDescription"/>
+        <result property="targetImage" column="targetImage"/>
+    </resultMap>
+    
+    <select id="selectUserFavoritesWithDetails" resultMap="UserFavoriteDetailMap">
+        SELECT 
+            uf.id,
+            uf.user_id,
+            uf.target_type,
+            uf.target_id,
+            uf.create_time,
+            CASE 
+                WHEN uf.target_type = 'activity' THEN a.title
+                WHEN uf.target_type = 'service_item' THEN si.name
+            END as targetTitle,
+            CASE 
+                WHEN uf.target_type = 'activity' THEN a.content
+                WHEN uf.target_type = 'service_item' THEN si.description
+            END as targetDescription,
+            CASE 
+                WHEN uf.target_type = 'activity' THEN NULL
+                WHEN uf.target_type = 'service_item' THEN NULL
+            END as targetImage
+        FROM user_favorite uf
+        LEFT JOIN activity a ON uf.target_type = 'activity' AND uf.target_id = a.id
+        LEFT JOIN service_item si ON uf.target_type = 'service_item' AND uf.target_id = si.id
+        WHERE uf.user_id = #{userId}
+        ORDER BY uf.create_time DESC
+    </select>
+    
+    <!-- 根据用户ID和目标类型查询收藏列表 -->
+    <select id="selectByUserIdAndTargetType" resultType="com.community.center.entity.UserFavorite">
+        SELECT 
+            uf.id,
+            uf.user_id,
+            uf.target_type,
+            uf.target_id,
+            uf.create_time,
+            CASE 
+                WHEN uf.target_type = 'activity' THEN a.title
+                WHEN uf.target_type = 'service_item' THEN si.name
+            END as targetTitle,
+            CASE 
+                WHEN uf.target_type = 'activity' THEN a.content
+                WHEN uf.target_type = 'service_item' THEN si.description
+            END as targetDescription,
+            CASE 
+                WHEN uf.target_type = 'activity' THEN NULL
+                WHEN uf.target_type = 'service_item' THEN NULL
+            END as targetImage
+        FROM user_favorite uf
+        LEFT JOIN activity a ON uf.target_type = 'activity' AND uf.target_id = a.id
+        LEFT JOIN service_item si ON uf.target_type = 'service_item' AND uf.target_id = si.id
+        WHERE uf.user_id = #{userId} AND uf.target_type = #{targetType}
+        ORDER BY uf.create_time DESC
+    </select>
+    
+    <!-- 检查是否已收藏 -->
+    <select id="selectByUserAndTarget" resultType="com.community.center.entity.UserFavorite">
+        SELECT * FROM user_favorite 
+        WHERE user_id = #{userId} 
+        AND target_type = #{targetType} 
+        AND target_id = #{targetId}
+        LIMIT 1
+    </select>
+    
+    <!-- 删除收藏 -->
+    <delete id="deleteByUserAndTarget">
+        DELETE FROM user_favorite 
+        WHERE user_id = #{userId} 
+        AND target_type = #{targetType} 
+        AND target_id = #{targetId}
+    </delete>
+    
+</mapper>

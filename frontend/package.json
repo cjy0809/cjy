@@ -1,0 +1,30 @@
+{
+  "name": "community-center-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "@stomp/stompjs": "^7.2.1",
+    "@tinymce/tinymce-vue": "^6.3.0",
+    "axios": "^1.4.0",
+    "echarts": "^6.0.0",
+    "element-plus": "^2.13.0",
+    "mitt": "^3.0.1",
+    "pinia": "^2.1.6",
+    "sockjs-client": "^1.6.1",
+    "tinymce": "^8.3.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "sass": "^1.64.2",
+    "vite": "^4.4.5"
+  }
+}

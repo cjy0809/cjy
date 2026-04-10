@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+#app {
+  height: 100vh;
+  width: 100vw;
+}
+
+/* 登录注册页面样式 */
+.auth-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+}
+
+.auth-card {
+  width: 400px;
+  padding: 40px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.auth-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+  color: #303133;
+  font-weight: 500;
+}
+
+.auth-form {
+  width: 100%;
+}
+
+.auth-button {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #909399;
+  font-size: 14px;
+}
+
+.auth-link {
+  color: #409eff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}

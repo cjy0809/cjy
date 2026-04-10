@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.center.mapper.ActivityMapper">
+
+    <select id="selectActivityPage" resultType="com.community.center.entity.Activity">
+        SELECT *
+        FROM activity
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="increaseCurrentParticipants">
+        UPDATE activity
+        SET current_participants = current_participants + 1
+        WHERE id = #{activityId}
+    </update>
+
+    <update id="decreaseCurrentParticipants">
+        UPDATE activity
+        SET current_participants = current_participants - 1
+        WHERE id = #{activityId} AND current_participants > 0
+    </update>
+
+</mapper>

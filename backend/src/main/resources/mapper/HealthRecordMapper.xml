@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.center.mapper.HealthRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.community.center.entity.HealthRecord">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="record_time" property="recordTime"/>
+        <result column="blood_pressure" property="bloodPressure"/>
+        <result column="temperature" property="temperature"/>
+        <result column="blood_sugar" property="bloodSugar"/>
+        <result column="heart_rate" property="heartRate"/>
+        <result column="weight" property="weight"/>
+        <result column="height" property="height"/>
+        <result column="health_status" property="healthStatus"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="remark" property="remark"/>
+        <result column="white_blood_cell" property="whiteBloodCell"/>
+        <result column="hemoglobin" property="hemoglobin"/>
+        <result column="hematocrit" property="hematocrit"/>
+        <result column="platelet_count" property="plateletCount"/>
+        <result column="alt" property="alt"/>
+        <result column="ast" property="ast"/>
+        <result column="ggt" property="ggt"/>
+        <result column="alp" property="alp"/>
+        <result column="total_protein" property="totalProtein"/>
+        <result column="albumin" property="albumin"/>
+        <result column="creatinine" property="creatinine"/>
+        <result column="blood_urea_nitrogen" property="bloodUreaNitrogen"/>
+        <result column="egfr" property="egfr"/>
+        <result column="uric_acid" property="uricAcid"/>
+        <result column="total_cholesterol" property="totalCholesterol"/>
+        <result column="triglycerides" property="triglycerides"/>
+        <result column="ldl_cholesterol" property="ldlCholesterol"/>
+        <result column="hdl_cholesterol" property="hdlCholesterol"/>
+    </resultMap>
+
+    <!-- 根据ID查询健康记录 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM health_record WHERE id = #{id}
+    </select>
+
+    <!-- 查询健康记录列表 -->
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT * FROM health_record
+        <where>
+            <if test="params.userId != null">
+                AND user_id = #{params.userId}
+            </if>
+            <if test="params.healthStatus != null">
+                AND health_status = #{params.healthStatus}
+            </if>
+            <if test="params.recordTime != null">
+                AND record_time = #{params.recordTime}
+            </if>
+            <if test="params.startDate != null">
+                AND record_time >= #{params.startDate}
+            </if>
+            <if test="params.endDate != null">
+                AND record_time &lt;= #{params.endDate}
+            </if>
+        </where>
+        ORDER BY record_time DESC
+    </select>
+
+    <!-- 根据用户ID查询健康记录列表 -->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT * FROM health_record WHERE user_id = #{userId}
+        <if test="params.startDate != null">
+            AND record_time >= #{params.startDate}
+        </if>
+        <if test="params.endDate != null">
+            AND record_time &lt;= #{params.endDate}
+        </if>
+        ORDER BY record_time DESC
+    </select>
+
+    <!-- 插入健康记录 -->
+    <insert id="insert" parameterType="com.community.center.entity.HealthRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO health_record (
+            user_id, record_time, blood_pressure, temperature, 
+            blood_sugar, heart_rate, weight, height, health_status, 
+            create_time, update_time, remark, white_blood_cell, hemoglobin, 
+            hematocrit, platelet_count, alt, ast, ggt, alp, total_protein, 
+            albumin, creatinine, blood_urea_nitrogen, egfr, uric_acid, 
+            total_cholesterol, triglycerides, ldl_cholesterol, hdl_cholesterol
+        ) VALUES (
+            #{userId}, #{recordTime}, #{bloodPressure}, #{temperature}, 
+            #{bloodSugar}, #{heartRate}, #{weight}, #{height}, #{healthStatus}, 
+            #{createTime}, #{updateTime}, #{remark}, #{whiteBloodCell}, #{hemoglobin}, 
+            #{hematocrit}, #{plateletCount}, #{alt}, #{ast}, #{ggt}, #{alp}, #{totalProtein}, 
+            #{albumin}, #{creatinine}, #{bloodUreaNitrogen}, #{egfr}, #{uricAcid}, 
+            #{totalCholesterol}, #{triglycerides}, #{ldlCholesterol}, #{hdlCholesterol}
+        )
+    </insert>
+
+    <!-- 更新健康记录 -->
+    <update id="updateById" parameterType="com.community.center.entity.HealthRecord">
+        UPDATE health_record
+        <set>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="recordTime != null">record_time = #{recordTime},</if>
+            <if test="bloodPressure != null">blood_pressure = #{bloodPressure},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="bloodSugar != null">blood_sugar = #{bloodSugar},</if>
+            <if test="heartRate != null">heart_rate = #{heartRate},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="healthStatus != null">health_status = #{healthStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="whiteBloodCell != null">white_blood_cell = #{whiteBloodCell},</if>
+            <if test="hemoglobin != null">hemoglobin = #{hemoglobin},</if>
+            <if test="hematocrit != null">hematocrit = #{hematocrit},</if>
+            <if test="plateletCount != null">platelet_count = #{plateletCount},</if>
+            <if test="alt != null">alt = #{alt},</if>
+            <if test="ast != null">ast = #{ast},</if>
+            <if test="ggt != null">ggt = #{ggt},</if>
+            <if test="alp != null">alp = #{alp},</if>
+            <if test="totalProtein != null">total_protein = #{totalProtein},</if>
+            <if test="albumin != null">albumin = #{albumin},</if>
+            <if test="creatinine != null">creatinine = #{creatinine},</if>
+            <if test="bloodUreaNitrogen != null">blood_urea_nitrogen = #{bloodUreaNitrogen},</if>
+            <if test="egfr != null">egfr = #{egfr},</if>
+            <if test="uricAcid != null">uric_acid = #{uricAcid},</if>
+            <if test="totalCholesterol != null">total_cholesterol = #{totalCholesterol},</if>
+            <if test="triglycerides != null">triglycerides = #{triglycerides},</if>
+            <if test="ldlCholesterol != null">ldl_cholesterol = #{ldlCholesterol},</if>
+            <if test="hdlCholesterol != null">hdl_cholesterol = #{hdlCholesterol},</if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除健康记录 -->
+    <delete id="deleteById">
+        DELETE FROM health_record WHERE id = #{id}
+    </delete>
+
+</mapper>

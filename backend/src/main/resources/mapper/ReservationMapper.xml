@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.center.mapper.ReservationMapper">
+
+    <!-- 定义结果映射，确保字段正确映射 -->
+    <resultMap id="ReservationResultMap" type="com.community.center.entity.Reservation">
+        <id column="id" property="id"/>
+        <result column="venue_id" property="venueId"/>
+        <result column="user_id" property="userId"/>
+        <result column="reservation_date" property="reservationDate"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="purpose" property="purpose"/>
+        <result column="participants" property="participants"/>
+        <result column="status" property="status"/>
+        <result column="reviewer_id" property="reviewerId"/>
+        <result column="review_time" property="reviewTime"/>
+        <result column="review_comment" property="reviewComment"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectReservationPage" resultMap="ReservationResultMap">
+        SELECT r.id, r.venue_id, r.user_id, r.reservation_date, r.start_time, r.end_time, r.purpose, r.participants, r.status, r.reviewer_id, r.review_time, r.review_comment, r.create_time, r.update_time
+        FROM venue_reservation r
+        INNER JOIN venue v ON r.venue_id = v.id
+        INNER JOIN user u ON r.user_id = u.id
+        WHERE 1=1
+        <if test="userId != null">
+            AND r.user_id = #{userId}
+        </if>
+        <if test="venueId != null">
+            AND r.venue_id = #{venueId}
+        </if>
+        <if test="venueName != null and venueName != ''">
+            AND v.name LIKE CONCAT('%', #{venueName}, '%')
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.name LIKE CONCAT('%', #{userName}, '%')
+        </if>
+        <if test="status != null">
+            AND r.status = #{status}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND r.start_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND r.end_time &lt;= #{endTime}
+        </if>
+        ORDER BY r.id DESC
+    </select>
+    
+    <!-- 测试SQL，用于验证筛选逻辑 -->
+    <select id="testReservationFilter" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM venue_reservation r
+        LEFT JOIN venue v ON r.venue_id = v.id
+        LEFT JOIN user u ON r.user_id = u.id
+        WHERE 1=1
+        <if test="venueName != null and venueName != ''">
+            AND v.name LIKE CONCAT('%', #{venueName}, '%')
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.name LIKE CONCAT('%', #{userName}, '%')
+        </if>
+    </select>
+
+    <select id="selectReservationByVenueAndTime" resultType="com.community.center.entity.Reservation">
+        SELECT *
+        FROM venue_reservation
+        WHERE venue_id = #{venueId}
+        AND status != 2
+        AND (
+            (start_time &lt;= #{startTime} AND end_time &gt; #{startTime})
+            OR (start_time &lt; #{endTime} AND end_time &gt;= #{endTime})
+            OR (start_time &gt;= #{startTime} AND end_time &lt;= #{endTime})
+        )
+    </select>
+
+    <select id="selectReservationByUserAndTime" resultType="com.community.center.entity.Reservation">
+        SELECT *
+        FROM venue_reservation
+        WHERE user_id = #{userId}
+        AND status != 2
+        AND (
+            (start_time &lt;= #{startTime} AND end_time &gt; #{startTime})
+            OR (start_time &lt; #{endTime} AND end_time &gt;= #{endTime})
+            OR (start_time &gt;= #{startTime} AND end_time &lt;= #{endTime})
+        )
+    </select>
+    
+    <select id="selectCalendarReservations" resultType="com.community.center.entity.Reservation">
+        SELECT r.*
+        FROM venue_reservation r
+        LEFT JOIN venue v ON r.venue_id = v.id
+        WHERE r.reservation_date BETWEEN #{startDate} AND #{endDate}
+        <if test="venueId != null">
+            AND r.venue_id = #{venueId}
+        </if>
+        <if test="status != null">
+            AND r.status = #{status}
+        </if>
+        ORDER BY r.reservation_date DESC, r.start_time DESC
+    </select>
+</mapper>

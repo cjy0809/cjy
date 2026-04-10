@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.center.mapper.CommentMapper">
+
+    <!-- 评论结果映射 -->
+    <resultMap id="CommentWithUserInfoMap" type="com.community.center.entity.Comment">
+        <id column="id" property="id"/>
+        <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
+        <result column="target_type" property="targetType"/>
+        <result column="target_id" property="targetId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="rating" property="rating"/>
+        <!-- 非数据库字段 -->
+        <result column="user_name" property="userName"/>
+        <result column="user_avatar" property="userAvatar"/>
+        <result column="user_role" property="userRole"/>
+        <result column="reply_count" property="replyCount"/>
+        <result column="target_title" property="targetTitle"/>
+    </resultMap>
+
+    <!-- 分页查询评论列表（包含用户信息） -->
+    <select id="selectCommentPageWithUserInfo" resultMap="CommentWithUserInfoMap">
+        SELECT 
+            c.id, c.content, c.user_id, c.target_type, c.target_id, 
+            c.parent_id, c.status, c.create_time, c.update_time, c.rating,
+            u.name as user_name, u.avatar as user_avatar, u.role as user_role,
+            (SELECT COUNT(*) FROM comment WHERE parent_id = c.id AND status = 0) as reply_count
+        FROM comment c
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.status = 0
+        <if test="targetType != null and targetType != ''">
+            AND c.target_type = #{targetType}
+        </if>
+        <if test="targetId != null">
+            AND c.target_id = #{targetId}
+        </if>
+        ORDER BY c.create_time DESC
+    </select>
+
+    <!-- 分页查询评分列表（包含用户信息） -->
+    <select id="selectRatingPageWithUserInfo" resultMap="CommentWithUserInfoMap">
+        SELECT 
+            c.id, c.content, c.user_id, c.target_type, c.target_id, 
+            c.parent_id, c.status, c.create_time, c.update_time, c.rating,
+            u.name as user_name, u.avatar as user_avatar, u.role as user_role,
+            (SELECT COUNT(*) FROM comment WHERE parent_id = c.id AND status = 0) as reply_count
+        FROM comment c
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.status = 0 AND c.rating IS NOT NULL
+        <if test="targetType != null and targetType != ''">
+            AND c.target_type = #{targetType}
+        </if>
+        <if test="rating != null">
+            AND c.rating = #{rating}
+        </if>
+        AND c.target_type IN ('activity', 'service_item')
+        ORDER BY c.create_time DESC
+    </select>
+
+    <!-- 查询评论详情（包含用户信息和回复数） -->
+    <select id="selectCommentWithUserInfo" resultMap="CommentWithUserInfoMap">
+        SELECT 
+            c.id, c.content, c.user_id, c.target_type, c.target_id, 
+            c.parent_id, c.status, c.create_time, c.update_time, c.rating,
+            u.name as user_name, u.avatar as user_avatar, u.role as user_role,
+            (SELECT COUNT(*) FROM comment WHERE parent_id = c.id AND status = 0) as reply_count,
+            CASE 
+                WHEN c.target_type = 'activity' THEN (SELECT title FROM activity WHERE id = c.target_id)
+                WHEN c.target_type = 'news' THEN (SELECT title FROM news WHERE id = c.target_id)
+                ELSE ''
+            END as target_title
+        FROM comment c
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.id = #{id} AND c.status = 0
+    </select>
+
+    <!-- 查询一级评论列表（包含用户信息和回复数） -->
+    <select id="selectFirstLevelComments" resultMap="CommentWithUserInfoMap">
+        SELECT 
+            c.id, c.content, c.user_id, c.target_type, c.target_id, 
+            c.parent_id, c.status, c.create_time, c.update_time, c.rating,
+            u.name as user_name, u.avatar as user_avatar, u.role as user_role,
+            (SELECT COUNT(*) FROM comment WHERE parent_id = c.id AND status = 0) as reply_count
+        FROM comment c
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.target_type = #{targetType} 
+        AND c.target_id = #{targetId}
+        AND c.parent_id = 0
+        AND c.status = 0
+        ORDER BY c.create_time DESC
+    </select>
+    
+    <!-- 分页查询一级评论列表（包含用户信息和回复数） -->
+    <select id="selectFirstLevelCommentsPage" resultMap="CommentWithUserInfoMap">
+        SELECT 
+            c.id, c.content, c.user_id, c.target_type, c.target_id, 
+            c.parent_id, c.status, c.create_time, c.update_time, c.rating,
+            u.name as user_name, u.avatar as user_avatar, u.role as user_role,
+            (SELECT COUNT(*) FROM comment WHERE parent_id = c.id AND status = 0) as reply_count
+        FROM comment c
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.target_type = #{targetType} 
+        AND c.target_id = #{targetId}
+        AND c.parent_id = 0
+        AND c.status = 0
+        ORDER BY c.create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 查询子评论列表（包含用户信息） -->
+    <select id="selectChildComments" resultMap="CommentWithUserInfoMap">
+        SELECT 
+            c.id, c.content, c.user_id, c.target_type, c.target_id, 
+            c.parent_id, c.status, c.create_time, c.update_time, c.rating,
+            u.name as user_name, u.avatar as user_avatar, u.role as user_role
+        FROM comment c
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.parent_id = #{parentId}
+        AND c.status = 0
+        ORDER BY c.create_time DESC
+    </select>
+
+    <!-- 获取评论统计信息 -->
+    <select id="getCommentStatistics" resultType="com.community.center.dto.CommentStatisticsDTO">
+        SELECT 
+            COUNT(*) as totalComments,
+            (SELECT COUNT(*) FROM comment WHERE target_type = 'activity' AND status = 0) as activityComments,
+            (SELECT COUNT(*) FROM comment WHERE target_type = 'news' AND status = 0) as newsComments,
+            (SELECT COUNT(*) FROM comment WHERE target_type = 'service_item' AND status = 0) as serviceItemComments,
+            (SELECT COUNT(*) FROM comment WHERE DATE(create_time) = CURDATE() AND status = 0) as todayComments,
+            (SELECT COUNT(*) FROM comment WHERE YEARWEEK(create_time) = YEARWEEK(NOW()) AND status = 0) as thisWeekComments,
+            (SELECT COUNT(*) FROM comment WHERE YEAR(create_time) = YEAR(NOW()) AND MONTH(create_time) = MONTH(NOW()) AND status = 0) as thisMonthComments
+        FROM comment 
+        WHERE status = 0
+    </select>
+
+    <!-- 获取评分统计信息 -->
+    <select id="getRatingStatistics" resultType="com.community.center.dto.RatingStatisticsDTO">
+        SELECT 
+            COUNT(CASE WHEN rating IS NOT NULL THEN 1 END) as totalRatings,
+            COUNT(CASE WHEN target_type = 'activity' AND rating IS NOT NULL THEN 1 END) as activityRatings,
+            COUNT(CASE WHEN target_type = 'service_item' AND rating IS NOT NULL THEN 1 END) as serviceItemRatings,
+            AVG(CASE WHEN rating IS NOT NULL THEN rating END) as averageRating,
+            AVG(CASE WHEN target_type = 'activity' AND rating IS NOT NULL THEN rating END) as activityAverageRating,
+            AVG(CASE WHEN target_type = 'service_item' AND rating IS NOT NULL THEN rating END) as serviceItemAverageRating,
+            COUNT(CASE WHEN rating = 5 THEN 1 END) as fiveStarCount,
+            COUNT(CASE WHEN rating = 4 THEN 1 END) as fourStarCount,
+            COUNT(CASE WHEN rating = 3 THEN 1 END) as threeStarCount,
+            COUNT(CASE WHEN rating = 2 THEN 1 END) as twoStarCount,
+            COUNT(CASE WHEN rating = 1 THEN 1 END) as oneStarCount
+        FROM comment 
+        WHERE status = 0
+    </select>
+
+    <!-- 根据目标类型获取评分统计信息 -->
+    <select id="getRatingStatisticsByTargetType" resultType="com.community.center.dto.RatingStatisticsDTO">
+        SELECT 
+            (SELECT COUNT(*) FROM comment WHERE target_type = #{targetType} AND rating IS NOT NULL AND status = 0) as totalRatings,
+            (SELECT AVG(rating) FROM comment WHERE target_type = #{targetType} AND rating IS NOT NULL AND status = 0) as averageRating,
+            (SELECT COUNT(*) FROM comment WHERE target_type = #{targetType} AND rating = 5 AND status = 0) as fiveStarCount,
+            (SELECT COUNT(*) FROM comment WHERE target_type = #{targetType} AND rating = 4 AND status = 0) as fourStarCount,
+            (SELECT COUNT(*) FROM comment WHERE target_type = #{targetType} AND rating = 3 AND status = 0) as threeStarCount,
+            (SELECT COUNT(*) FROM comment WHERE target_type = #{targetType} AND rating = 2 AND status = 0) as twoStarCount,
+            (SELECT COUNT(*) FROM comment WHERE target_type = #{targetType} AND rating = 1 AND status = 0) as oneStarCount
+        FROM comment 
+        WHERE status = 0 LIMIT 1
+    </select>
+
+    <!-- 根据目标类型统计评论数量 -->
+    <select id="countByTargetType" resultType="java.lang.Long">
+        SELECT COUNT(*) 
+        FROM comment 
+        WHERE target_type = #{targetType} AND status = 0
+    </select>
+
+    <!-- 统计指定时间范围内的评论数量 -->
+    <select id="countByTimeRange" resultType="java.lang.Long">
+        SELECT COUNT(*) 
+        FROM comment 
+        WHERE create_time BETWEEN #{startTime} AND #{endTime} AND status = 0
+    </select>
+
+</mapper>

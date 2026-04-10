@@ -1,0 +1,55 @@
+server:
+  port: 8080
+  domain: http://localhost:8080
+
+spring:
+  application:
+    name: community-center
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/community_center?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 1000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    enabled: true
+
+# MyBatis Plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+  global-config:
+    db-config:
+      id-type: AUTO
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.community.center.entity
+
+# JWT配置
+jwt:
+  secret: communityCenterSecretKey2023ForJWTAuthenticationSecurity
+  expiration: 86400000  # 24小时
+
+# 文件上传配置
+upload:
+  path: D:/WebProject/final/uploads/
+
+  
+
+
+# 日志配置
+logging:
+  level:
+    com.community.center: debug
+    org.springframework.security: debug

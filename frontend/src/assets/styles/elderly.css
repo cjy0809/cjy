@@ -1,0 +1,701 @@
+/* 老年用户专用样式 - 简洁、易用、高对比度 */
+
+:root {
+  /* 老年用户界面主题色 - 简单朴素的蓝白灰配色 */
+  --elderly-primary-color: #2E5AAC;
+  --elderly-primary-light: #E8F0FE;
+  --elderly-primary-hover: #1E3A8A;
+  --elderly-success-color: #28A745;
+  --elderly-success-light: #E8F5E8;
+  --elderly-warning-color: #FD7E14;
+  --elderly-warning-light: #FFF4E6;
+  --elderly-error-color: #DC3545;
+  --elderly-error-light: #FFEEF0;
+  --elderly-info-color: #17A2B8;
+  --elderly-info-light: #E8F6F8;
+  
+  /* 老年用户界面中性色 - 高对比度 */
+  --elderly-text-primary: #212529;
+  --elderly-text-secondary: #495057;
+  --elderly-text-tertiary: #6C757D;
+  --elderly-text-disabled: #ADB5BD;
+  --elderly-text-inverse: #FFFFFF;
+  --elderly-border-color: #CED4DA;
+  --elderly-border-light: #E9ECEF;
+  --elderly-bg-light: #F8F9FA;
+  --elderly-bg-white: #FFFFFF;
+  --elderly-bg-dark: #E9ECEF;
+  --elderly-bg-gray: #F1F3F4;
+  
+  /* 老年用户界面间距 - 更大的间距 */
+  --elderly-space-xs: 8px;
+  --elderly-space-sm: 12px;
+  --elderly-space-md: 20px;
+  --elderly-space-lg: 28px;
+  --elderly-space-xl: 36px;
+  --elderly-space-xxl: 48px;
+  
+  /* 老年用户界面边框圆角 - 适中的圆角 */
+  --elderly-border-radius-sm: 4px;
+  --elderly-border-radius-md: 8px;
+  --elderly-border-radius-lg: 12px;
+  --elderly-border-radius-xl: 16px;
+  
+  /* 老年用户界面阴影 - 明显但不刺眼的阴影 */
+  --elderly-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --elderly-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --elderly-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  
+  /* 老年用户界面字体 - 更大的字体 */
+  --elderly-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Microsoft YaHei', 'PingFang SC';
+  --elderly-font-size-xs: 14px;
+  --elderly-font-size-sm: 16px;
+  --elderly-font-size-md: 18px;
+  --elderly-font-size-lg: 20px;
+  --elderly-font-size-xl: 24px;
+  --elderly-font-size-xxl: 28px;
+  --elderly-font-size-xxxl: 32px;
+  
+  /* 老年用户界面行高 - 更宽松的行高 */
+  --elderly-line-height-xs: 1.3;
+  --elderly-line-height-sm: 1.4;
+  --elderly-line-height-md: 1.6;
+  --elderly-line-height-lg: 1.8;
+  
+  /* 老年用户界面过渡 - 更慢的过渡效果 */
+  --elderly-transition-fast: 0.2s ease;
+  --elderly-transition-base: 0.4s ease;
+  --elderly-transition-slow: 0.6s ease;
+}
+
+/* 老年用户界面基础样式 */
+.elderly-layout {
+  font-family: var(--elderly-font-family);
+  font-size: var(--elderly-font-size-md);
+  line-height: var(--elderly-line-height-md);
+  color: var(--elderly-text-primary);
+  background-color: var(--elderly-bg-light);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 老年用户界面公告区域 */
+.elderly-announcement {
+  background-color: var(--elderly-warning-light);
+  border-bottom: 1px solid var(--elderly-warning-color);
+  padding: 4px var(--elderly-space-md);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--elderly-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.announcement-icon {
+  font-size: 16px;
+  color: var(--elderly-warning-color);
+}
+
+.announcement-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity var(--elderly-transition-base);
+}
+
+.announcement-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.control-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--elderly-warning-color);
+  transition: all var(--elderly-transition-fast);
+  user-select: none;
+}
+
+.control-btn:hover {
+  background-color: var(--elderly-bg-white);
+  transform: scale(1.1);
+}
+
+/* 公告轮播动画 */
+.announcement-text-enter-active,
+.announcement-text-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.announcement-text-enter-from,
+.announcement-text-leave-to {
+  opacity: 0;
+}
+
+/* 老年用户界面头部 */
+.elderly-header {
+  background-color: var(--elderly-bg-white);
+  box-shadow: var(--elderly-shadow-sm);
+  padding: 0 var(--elderly-space-lg);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 2px solid var(--elderly-primary-color);
+}
+
+.elderly-logo {
+  font-size: var(--elderly-font-size-xl);
+  font-weight: 600;
+  color: var(--elderly-primary-color);
+  display: flex;
+  align-items: center;
+}
+
+.elderly-logo-icon {
+  margin-right: var(--elderly-space-sm);
+  font-size: var(--elderly-font-size-xxl);
+}
+
+.elderly-nav {
+  display: flex;
+  gap: var(--elderly-space-md);
+}
+
+.elderly-nav-item {
+  padding: var(--elderly-space-sm) var(--elderly-space-md);
+  font-size: var(--elderly-font-size-md);
+  color: var(--elderly-text-secondary);
+  cursor: pointer;
+  transition: all var(--elderly-transition-base);
+  border-radius: var(--elderly-border-radius-md);
+  font-weight: 500;
+  position: relative;
+}
+
+.elderly-nav-item:hover,
+.elderly-nav-item.active {
+  color: var(--elderly-bg-white);
+  background-color: var(--elderly-primary-color);
+}
+
+.elderly-user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--elderly-space-md);
+}
+
+.elderly-user-avatar {
+  margin-right: var(--elderly-space-sm);
+  border: 2px solid var(--elderly-border-color);
+  transition: all var(--elderly-transition-base);
+}
+
+.elderly-user-avatar:hover {
+  border-color: var(--elderly-primary-color);
+  transform: scale(1.05);
+}
+
+.elderly-username {
+  font-size: var(--elderly-font-size-md);
+  font-weight: 500;
+  color: var(--elderly-text-primary);
+}
+
+.elderly-logout-btn {
+  padding: var(--elderly-space-sm) var(--elderly-space-md);
+  background-color: var(--elderly-error-color);
+  color: var(--elderly-bg-white);
+  border: none;
+  border-radius: var(--elderly-border-radius-md);
+  font-size: var(--elderly-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--elderly-transition-base);
+}
+
+.elderly-logout-btn:hover {
+  background-color: var(--elderly-primary-hover);
+}
+
+/* 老年用户界面下拉菜单样式 */
+.elderly-user-dropdown {
+  display: flex;
+  align-items: center;
+  gap: var(--elderly-space-sm);
+  padding: var(--elderly-space-md) var(--elderly-space-lg);
+  border-radius: var(--elderly-border-radius-md);
+  cursor: pointer;
+  transition: all var(--elderly-transition-base);
+  border: 2px solid transparent;
+}
+
+.elderly-user-dropdown:hover {
+  background-color: var(--elderly-primary-light);
+  border-color: var(--elderly-primary-color);
+}
+
+.dropdown-arrow {
+  font-size: var(--elderly-font-size-sm);
+  color: var(--elderly-text-secondary);
+  transition: all var(--elderly-transition-base);
+}
+
+.elderly-user-dropdown:hover .dropdown-arrow {
+  color: var(--elderly-primary-color);
+}
+
+/* Element Plus 下拉菜单样式覆盖 */
+.el-dropdown-menu {
+  border-radius: var(--elderly-border-radius-lg) !important;
+  box-shadow: var(--elderly-shadow-md) !important;
+  border: 2px solid var(--elderly-border-color) !important;
+  padding: var(--elderly-space-xs) 0 !important;
+  min-width: 120px !important;
+}
+
+.el-dropdown-menu__item {
+  font-size: var(--elderly-font-size-sm) !important;
+  padding: var(--elderly-space-sm) var(--elderly-space-md) !important;
+  color: var(--elderly-text-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--elderly-space-xs) !important;
+  transition: all var(--elderly-transition-base) !important;
+}
+
+.el-dropdown-menu__item:hover {
+  background-color: var(--elderly-primary-light) !important;
+  color: var(--elderly-primary-color) !important;
+}
+
+.el-dropdown-menu__item.is-divided {
+  border-top: 2px solid var(--elderly-border-light) !important;
+  margin-top: var(--elderly-space-xs) !important;
+}
+
+.dropdown-item-icon {
+  font-size: var(--elderly-font-size-md);
+}
+
+/* 老年用户界面主体 */
+.elderly-main {
+  flex: 1;
+  padding: var(--elderly-space-lg);
+  overflow-y: auto;
+}
+
+/* 老年用户界面卡片 */
+.elderly-card {
+  background-color: var(--elderly-bg-white);
+  border-radius: var(--elderly-border-radius-lg);
+  box-shadow: var(--elderly-shadow-sm);
+  margin-bottom: var(--elderly-space-lg);
+  overflow: hidden;
+  transition: all var(--elderly-transition-base);
+}
+
+.elderly-card:hover {
+  box-shadow: var(--elderly-shadow-md);
+  transform: translateY(-2px);
+}
+
+.elderly-card-header {
+  padding: var(--elderly-space-md) var(--elderly-space-lg);
+  border-bottom: 2px solid var(--elderly-border-light);
+  background-color: var(--elderly-bg-white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.elderly-card-title {
+  font-size: var(--elderly-font-size-lg);
+  font-weight: 600;
+  color: var(--elderly-text-primary);
+  margin: 0;
+}
+
+.elderly-card-body {
+  padding: var(--elderly-space-lg);
+}
+
+/* 老年用户界面按钮 */
+.elderly-button {
+  padding: var(--elderly-space-sm) var(--elderly-space-md);
+  border-radius: var(--elderly-border-radius-md);
+  font-size: var(--elderly-font-size-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--elderly-transition-base);
+  border: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  min-width: 120px;
+}
+
+.elderly-button-primary {
+  background-color: var(--elderly-primary-color);
+  color: var(--elderly-bg-white);
+  border-color: var(--elderly-primary-color);
+}
+
+.elderly-button-primary:hover {
+  background-color: var(--elderly-primary-hover);
+  border-color: var(--elderly-primary-hover);
+}
+
+.elderly-button-default {
+  background-color: var(--elderly-bg-white);
+  color: var(--elderly-text-primary);
+  border-color: var(--elderly-border-color);
+}
+
+.elderly-button-default:hover {
+  color: var(--elderly-primary-color);
+  border-color: var(--elderly-primary-color);
+}
+
+.elderly-button-outline {
+  background-color: var(--elderly-bg-white);
+  color: var(--elderly-primary-color);
+  border-color: var(--elderly-primary-color);
+}
+
+.elderly-button-outline:hover {
+  background-color: var(--elderly-primary-light);
+  border-color: var(--elderly-primary-hover);
+}
+
+.elderly-button-success {
+  background-color: var(--elderly-success-color);
+  color: var(--elderly-bg-white);
+  border-color: var(--elderly-success-color);
+}
+
+.elderly-button-success:hover {
+  background-color: #1E7E34;
+  border-color: #1E7E34;
+}
+
+.elderly-button-danger {
+  background-color: var(--elderly-error-color);
+  color: var(--elderly-bg-white);
+  border-color: var(--elderly-error-color);
+}
+
+.elderly-button-danger:hover {
+  background-color: #C82333;
+  border-color: #C82333;
+}
+
+.elderly-button-icon {
+  margin-right: var(--elderly-space-sm);
+  font-size: var(--elderly-font-size-lg);
+}
+
+/* 老年用户界面功能卡片 */
+.elderly-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--elderly-space-md);
+  margin-bottom: var(--elderly-space-lg);
+}
+
+.elderly-feature-card {
+  background-color: var(--elderly-bg-white);
+  border-radius: var(--elderly-border-radius-lg);
+  box-shadow: var(--elderly-shadow-sm);
+  padding: var(--elderly-space-md);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--elderly-transition-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 160px;
+  justify-content: center;
+}
+
+.elderly-feature-card:hover {
+  box-shadow: var(--elderly-shadow-md);
+  transform: translateY(-4px);
+  background-color: var(--elderly-primary-light);
+}
+
+.elderly-feature-icon {
+  font-size: var(--elderly-font-size-xxl);
+  color: var(--elderly-primary-color);
+  margin-bottom: var(--elderly-space-sm);
+}
+
+.elderly-feature-title {
+  font-size: var(--elderly-font-size-md);
+  font-weight: 600;
+  color: var(--elderly-text-primary);
+  margin-bottom: var(--elderly-space-xs);
+}
+
+.elderly-feature-desc {
+  font-size: var(--elderly-font-size-sm);
+  color: var(--elderly-text-secondary);
+  line-height: var(--elderly-line-height-md);
+}
+
+/* 老年用户界面列表 */
+.elderly-list {
+  background-color: var(--elderly-bg-white);
+  border-radius: var(--elderly-border-radius-lg);
+  box-shadow: var(--elderly-shadow-sm);
+  overflow: hidden;
+}
+
+.elderly-list-item {
+  padding: var(--elderly-space-md) var(--elderly-space-lg);
+  border-bottom: 2px solid var(--elderly-border-light);
+  transition: all var(--elderly-transition-base);
+  cursor: pointer;
+}
+
+.elderly-list-item:hover {
+  background-color: var(--elderly-bg-light);
+}
+
+.elderly-list-item:last-child {
+  border-bottom: none;
+}
+
+.elderly-list-title {
+  font-size: var(--elderly-font-size-lg);
+  font-weight: 600;
+  color: var(--elderly-text-primary);
+  margin-bottom: var(--elderly-space-xs);
+}
+
+.elderly-list-desc {
+  font-size: var(--elderly-font-size-md);
+  color: var(--elderly-text-secondary);
+  line-height: var(--elderly-line-height-lg);
+}
+
+.elderly-list-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--elderly-space-sm);
+  font-size: var(--elderly-font-size-sm);
+  color: var(--elderly-text-tertiary);
+}
+
+/* 老年用户界面表单 */
+.elderly-form {
+  background-color: var(--elderly-bg-white);
+  border-radius: var(--elderly-border-radius-lg);
+  box-shadow: var(--elderly-shadow-sm);
+  padding: var(--elderly-space-lg);
+}
+
+.elderly-form-group {
+  margin-bottom: var(--elderly-space-lg);
+}
+
+.elderly-form-label {
+  display: block;
+  font-size: var(--elderly-font-size-md);
+  font-weight: 600;
+  color: var(--elderly-text-primary);
+  margin-bottom: var(--elderly-space-sm);
+}
+
+.elderly-form-input {
+  width: 100%;
+  padding: var(--elderly-space-sm) var(--elderly-space-md);
+  border: 2px solid var(--elderly-border-color);
+  border-radius: var(--elderly-border-radius-md);
+  font-size: var(--elderly-font-size-md);
+  transition: all var(--elderly-transition-base);
+  min-height: 48px;
+}
+
+.elderly-form-input:focus {
+  border-color: var(--elderly-primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 90, 172, 0.2);
+}
+
+.elderly-form-footer {
+  margin-top: var(--elderly-space-xl);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--elderly-space-md);
+}
+
+/* 老年用户界面标签 */
+.elderly-tag {
+  display: inline-block;
+  padding: var(--elderly-space-xs) var(--elderly-space-sm);
+  border-radius: var(--elderly-border-radius-sm);
+  font-size: var(--elderly-font-size-sm);
+  font-weight: 500;
+  margin-right: var(--elderly-space-sm);
+}
+
+.elderly-tag-primary {
+  background-color: var(--elderly-primary-light);
+  color: var(--elderly-primary-color);
+}
+
+.elderly-tag-success {
+  background-color: var(--elderly-success-light);
+  color: var(--elderly-success-color);
+}
+
+.elderly-tag-warning {
+  background-color: var(--elderly-warning-light);
+  color: var(--elderly-warning-color);
+}
+
+.elderly-tag-error {
+  background-color: var(--elderly-error-light);
+  color: var(--elderly-error-color);
+}
+
+/* 老年用户界面滚动条样式 - 更明显、更容易点击 */
+.elderly-main::-webkit-scrollbar {
+  width: 16px; /* 更宽的滚动条 */
+  height: 16px;
+}
+
+.elderly-main::-webkit-scrollbar-track {
+  background: var(--elderly-bg-light);
+  border-radius: 8px;
+}
+
+.elderly-main::-webkit-scrollbar-thumb {
+  background: var(--elderly-primary-color); /* 使用主题色，更明显 */
+  border-radius: 8px;
+  border: 3px solid var(--elderly-bg-light); /* 添加边框，增加层次感 */
+}
+
+.elderly-main::-webkit-scrollbar-thumb:hover {
+  background: var(--elderly-primary-hover); /* 悬停时颜色加深 */
+}
+
+/* Firefox滚动条样式 */
+.elderly-main {
+  scrollbar-width: thick; /* 更宽的滚动条 */
+  scrollbar-color: var(--elderly-primary-color) var(--elderly-bg-light); /* 滚动条颜色和轨道颜色 */
+}
+
+/* 老年用户界面响应式设计 */
+@media (max-width: 768px) {
+  .elderly-header {
+    padding: 0 var(--elderly-space-md);
+    height: 70px;
+    flex-wrap: wrap;
+  }
+  
+  .elderly-logo {
+    font-size: var(--elderly-font-size-lg);
+  }
+  
+  .elderly-nav {
+    order: 3;
+    width: 100%;
+    margin-top: var(--elderly-space-sm);
+    flex-wrap: wrap;
+  }
+  
+  .elderly-nav-item {
+    font-size: var(--elderly-font-size-sm);
+    padding: var(--elderly-space-xs) var(--elderly-space-sm);
+  }
+  
+  .elderly-main {
+    padding: var(--elderly-space-md);
+  }
+  
+  .elderly-feature-grid {
+    grid-template-columns: 1fr;
+    gap: var(--elderly-space-md);
+  }
+  
+  .elderly-feature-card {
+    min-height: 160px;
+    padding: var(--elderly-space-md);
+  }
+  
+  .elderly-feature-icon {
+    font-size: var(--elderly-font-size-xxl);
+  }
+  
+  .elderly-form-footer {
+    flex-direction: column;
+    gap: var(--elderly-space-sm);
+  }
+  
+  .elderly-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .elderly-header {
+    height: 60px;
+  }
+  
+  .elderly-logo {
+    font-size: var(--elderly-font-size-md);
+  }
+  
+  .elderly-logo-icon {
+    font-size: var(--elderly-font-size-xl);
+  }
+  
+  .elderly-nav-item {
+    font-size: var(--elderly-font-size-sm);
+  }
+  
+  .elderly-username {
+    font-size: var(--elderly-font-size-sm);
+  }
+  
+  .elderly-main {
+    padding: var(--elderly-space-sm);
+  }
+  
+  .elderly-feature-card {
+    min-height: 140px;
+    padding: var(--elderly-space-sm);
+  }
+  
+  .elderly-feature-icon {
+    font-size: var(--elderly-font-size-xl);
+  }
+  
+  .elderly-feature-title {
+    font-size: var(--elderly-font-size-md);
+  }
+  
+  .elderly-feature-desc {
+    font-size: var(--elderly-font-size-sm);
+  }
+}
